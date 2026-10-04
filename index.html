@@ -135,14 +135,6 @@ footer{padding:60px 0 50px;color:var(--mut);font-size:13px;text-align:center}
     <div class="key"><h3>Background consistency</h3><p>An auxiliary loss keeps regions visible in both the reference and the target video
       consistent, so the scene stays faithful when the camera moves.</p></div>
   </div>
-  <div class="bgloss">
-    <div><h3>Background-consistency loss</h3>
-      <p>During training, the loss compares the model's prediction with the target only where the background is visible in <i>both</i>
-      the reference and the target video (the <b>loss region</b>), excluding the subject and parts of the scene the reference never saw.</p>
-      <p>In that region, light-weight proxy features of the predicted target are pushed to agree with DINO features of the real target
-      (right column: green = agreement), so the scene stays faithful while the camera moves.</p></div>
-    <div class="img"><img src="bg_loss.jpg" alt="Where the background-consistency loss is applied"></div>
-  </div>
 </div></section>
 
 <section id="results"><div class="wrap">
