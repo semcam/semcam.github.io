@@ -46,6 +46,10 @@ h2{font-size:clamp(26px,3vw,38px);font-weight:800;letter-spacing:-.02em}
 .key{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
 .key h3{font-size:16px;margin-bottom:6px}
 .key p{color:var(--mut);font-size:14.5px}
+.bgloss{display:grid;grid-template-columns:1fr 1.25fr;gap:24px;align-items:center;margin-top:30px}
+.bgloss .img{background:#fff;border-radius:14px;padding:10px}.bgloss img{width:100%;display:block}
+.bgloss h3{font-size:20px;margin-bottom:8px}.bgloss p{color:#cfd4ee;font-size:15.5px;margin-top:8px}
+@media (max-width:900px){.bgloss{grid-template-columns:1fr}}
 /* chips, thumbs */
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 16px}
 .chip{cursor:pointer;border:1px solid var(--line);background:var(--panel);color:#d7dcf6;padding:9px 15px;border-radius:999px;font-weight:600;font-size:14px;transition:.15s}
@@ -130,6 +134,14 @@ footer{padding:60px 0 50px;color:var(--mut);font-size:13px;text-align:center}
     <div class="key"><h3>Motion modulation</h3><p>A learned embedding of the motion label predicts scale, shift and gate offsets for the transformer blocks, which helps disentangle the motion signals during training.</p></div>
     <div class="key"><h3>Background consistency</h3><p>An auxiliary loss keeps regions visible in both the reference and the target video
       consistent, so the scene stays faithful when the camera moves.</p></div>
+  </div>
+  <div class="bgloss">
+    <div><h3>Background-consistency loss</h3>
+      <p>During training, the loss compares the model's prediction with the target only where the background is visible in <i>both</i>
+      the reference and the target video (the <b>loss region</b>), excluding the subject and parts of the scene the reference never saw.</p>
+      <p>In that region, light-weight proxy features of the predicted target are pushed to agree with DINO features of the real target
+      (right column: green = agreement), so the scene stays faithful while the camera moves.</p></div>
+    <div class="img"><img src="bg_loss.jpg" alt="Where the background-consistency loss is applied"></div>
   </div>
 </div></section>
 
