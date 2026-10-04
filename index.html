@@ -90,7 +90,9 @@ h2{font-size:clamp(26px,3vw,38px);font-weight:800;letter-spacing:-.02em}
 @media (max-width:1250px){.cmp-stage .prev{left:6px}.cmp-stage .next{right:6px}}
 .cmp-grid .card.ours{border-color:var(--acc);box-shadow:0 0 0 2px rgba(91,140,255,.45)}
 .cmp-grid .na{display:flex;align-items:center;justify-content:center;height:100%;color:var(--mut);font-size:13px}
-.fus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:1080px;margin:0 auto}
+.fus-grid{display:grid;grid-template-columns:1fr 18px 1fr 34px 1fr 34px 1fr;gap:8px;align-items:center;max-width:1200px;margin:0 auto}
+.fus-grid.nob{grid-template-columns:1fr 18px 1fr 34px 1fr;max-width:920px}
+.op{font-size:30px;font-weight:800;text-align:center;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .fus-grid .card.ours{border-color:var(--acc);box-shadow:0 0 0 2px rgba(91,140,255,.45)}
 .plus{font-weight:800;color:var(--acc)}
 /* transport */
@@ -263,12 +265,14 @@ let cWheel = 0; $('#cmp-grid').addEventListener('wheel', ev => { if (Math.abs(ev
 
 /* fusion */
 let fIdx = 0; const fusVids = () => [...document.querySelectorAll('#fus-grid video')];
-function renderFus() { const e = D.fusion[fIdx], g = $('#fus-grid'); g.innerHTML = '';
-  [['input', 'Input', 'in'], ['A', e.a, ''], ['fusion', e.a + ' + ' + e.b, 'ours']].forEach(([k, l, cls]) => {
-    const c = mk('div', 'card ' + cls), b = mk('div', 'v'); b.append(mk('span', 'tag ' + cls, l), vid(e[k])); c.append(b); g.append(c); });
+function renderFus() { const e = D.fusion[fIdx], g = $('#fus-grid'); g.innerHTML = ''; g.classList.toggle('nob', !e.B);
+  const card = (k, l, cls) => { const c = mk('div', 'card ' + cls), b = mk('div', 'v'); b.append(mk('span', 'tag ' + cls, l), vid(e[k])); c.append(b); return c; };
+  g.append(card('input', 'Input', 'in'), mk('div'), card('A', e.a, ''));
+  if (e.B) g.append(mk('div', 'op', '+'), card('B', e.b, ''));
+  g.append(mk('div', 'op', '→'), card('fusion', e.a + ' + ' + e.b, 'ours'));
   document.querySelectorAll('#fus-chips .chip').forEach((c, i) => c.classList.toggle('on', i === fIdx));
   watch(g); fusVids().forEach(v => { v.currentTime = 0; v.play().catch(()=>{}); }); }
-D.fusion.forEach((e, i) => { const c = mk('button', 'chip', e.scene + ': ' + e.a + ' <span class="plus">+</span> ' + e.b); c.onclick = () => { fIdx = i; renderFus(); }; $('#fus-chips').append(c); });
+D.fusion.forEach((e, i) => { const c = mk('button', 'chip', e.a + ' <span class="plus">+</span> ' + e.b); c.onclick = () => { fIdx = i; renderFus(); }; $('#fus-chips').append(c); });
 const fTr = transport($('#fus-tr'), fusVids); renderFus();
 
 /* keyboard: ←/→ = motion (results) or scene (comparison) or example (fusion); space = play/pause of the section in view */
